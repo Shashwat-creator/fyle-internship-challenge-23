@@ -1,0 +1,15 @@
+/* repo-list.component.css */
+
+div {
+    margin-top: 20px;
+  }
+  
+  button {
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  select {
+    margin-left: 10px;
+  }
+  

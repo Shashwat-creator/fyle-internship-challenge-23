@@ -1,17 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from './services/api.service';
+
+import { Component } from '@angular/core';
+import { GithubService } from './github.service';
+
+interface Repository {
+  name: string;
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
-  constructor(
-    private apiService: ApiService
-  ) {}
+export class AppComponent {
+  repositories: Repository[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  username: string = ''; // Declare username property
 
-  ngOnInit() {
-    this.apiService.getUser('johnpapa').subscribe(console.log);
+  constructor(private githubService: GithubService) {}
+
+  onSearch(username: string) {
+    this.username = username; // Assign the entered username
+    this.loadRepositories(this.username, this.currentPage);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadRepositories(this.username, this.currentPage);
+  }
+
+  private loadRepositories(username: string, page: number) {
+    this.githubService.getUserRepositories(username, page, this.itemsPerPage)
+      .subscribe((repos: Repository[]) => {
+        this.repositories = repos;
+      });
   }
 }
+
